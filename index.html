@@ -1,0 +1,970 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CLAIM YOUR $1,000!!!</title>
+
+<style>
+* { box-sizing: border-box; }
+
+:root {
+    --red: #ff1010;
+    --yellow: #fff000;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Comic Sans MS", Arial, sans-serif;
+    background: var(--yellow);
+    color: #111;
+    text-align: center;
+    overflow-x: hidden;
+    transition: background .15s;
+}
+
+body.chaos {
+    animation: colors .5s infinite;
+}
+
+@keyframes colors {
+    0% { background: #fff000; }
+    25% { background: #ff8b00; }
+    50% { background: #00ffbd; }
+    75% { background: #ff66cc; }
+    100% { background: #fff000; }
+}
+
+header {
+    padding: 15px;
+    background: red;
+    color: white;
+    font-size: 20px;
+    font-weight: 900;
+    animation: headerColor .7s infinite;
+}
+
+@keyframes headerColor {
+    50% { background: purple; }
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 25px 15px;
+}
+
+h1 {
+    font-size: clamp(35px, 8vw, 75px);
+    text-shadow: 4px 4px #ff7777;
+}
+
+.money {
+    font-size: 65px;
+    font-weight: 900;
+    color: green;
+    text-shadow: 3px 3px white;
+}
+
+.subtitle {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#claim {
+    position: relative;
+    width: 260px;
+    height: 260px;
+    border: 10px solid #ff7777;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 25%, #ff8888, red 60%, darkred);
+    color: white;
+    font-size: 35px;
+    font-weight: 900;
+    cursor: pointer;
+    box-shadow: 0 25px 0 #850000, 0 35px 20px #0006;
+    z-index: 5;
+    transition: transform .12s;
+}
+
+#claim:active {
+    transform: translateY(15px);
+}
+
+#claim:focus-visible {
+    outline: 5px solid black;
+    outline-offset: 8px;
+}
+
+.info {
+    font-size: 19px;
+    font-weight: bold;
+    margin-top: 35px;
+}
+
+#fakeButtons {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 4;
+}
+
+.fake {
+    position: absolute;
+    pointer-events: auto;
+    border: 3px solid black;
+    padding: 12px 20px;
+    font-weight: 900;
+    cursor: pointer;
+    background: #00ff00;
+    color: black;
+    box-shadow: 4px 4px 0 black;
+}
+
+.fake:nth-child(even) {
+    background: #ff00e5;
+}
+
+.fake:nth-child(3n) {
+    background: orange;
+}
+
+.popup {
+    position: fixed;
+    z-index: 50;
+    width: min(290px, 85vw);
+    padding: 15px;
+    background: white;
+    color: black;
+    border: 4px solid black;
+    box-shadow: 7px 7px 0 #0008;
+    animation: pop .2s;
+}
+
+.popup h3 {
+    margin: 0 0 10px;
+    color: red;
+}
+
+.popup button {
+    background: red;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+@keyframes pop {
+    from { transform: scale(.2) rotate(20deg); }
+    to { transform: scale(1) rotate(0); }
+}
+
+#toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: black;
+    color: white;
+    padding: 15px 25px;
+    z-index: 80;
+    font-weight: bold;
+    display: none;
+    max-width: 90vw;
+}
+
+#loading {
+    display: none;
+    margin: 30px auto;
+    max-width: 600px;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.progress {
+    height: 28px;
+    background: white;
+    border: 3px solid black;
+    margin: 15px 0;
+}
+
+#bar {
+    width: 0;
+    height: 100%;
+    background: lime;
+}
+
+#update {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    background: #0878ca;
+    color: white;
+    padding: 10vh 20px;
+    font-family: Arial, sans-serif;
+}
+
+#update h1 {
+    text-shadow: none;
+    font-size: 45px;
+}
+
+#update button {
+    padding: 12px 25px;
+    margin: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#final {
+    display: none;
+    position: fixed;
+    inset: 0;
+    overflow-y: auto;
+    z-index: 100;
+    background: #050505;
+    color: white;
+    padding: 25px;
+    animation: finalShow .5s;
+}
+
+#final h1 {
+    color: red;
+    text-shadow: 0 0 25px red;
+}
+
+.final-link {
+    display: block;
+    max-width: 650px;
+    margin: 25px auto;
+    position: relative;
+    border: 4px solid red;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.final-link img {
+    display: block;
+    width: 100%;
+}
+
+.play {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-size: 80px;
+    background: #0004;
+}
+
+@keyframes finalShow {
+    from { opacity: 0; transform: scale(.8); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+🚨 YOU HAVE WON $1,000!!! CLICK NOW!!! 🚨
+</header>
+
+<main class="container" id="main">
+
+    <h1>CLAIM YOUR MONEY!!!</h1>
+
+    <div class="money" id="money">$1,000</div>
+
+    <p class="subtitle">
+        CONGRATULATIONS!!!
+        <br>
+        YOU ARE OUR 1,000,000TH VISITOR!!!
+    </p>
+
+    <button id="claim">
+        PRESS<br>TO CLAIM
+    </button>
+
+    <div class="info" id="info">
+        👇 THE MOST LEGIT BUTTON ON THE INTERNET 👇
+    </div>
+
+    <div id="loading">
+        <div id="loadingText">VERIFYING YOUR MONEY...</div>
+
+        <div class="progress">
+            <div id="bar"></div>
+        </div>
+
+        <div id="percentage">0%</div>
+    </div>
+
+    <p id="stats">
+        Buttons clicked: 0
+    </p>
+
+</main>
+
+<div id="fakeButtons"></div>
+<div id="toast"></div>
+
+<!-- FAKE UPDATE -->
+<div id="update">
+    <h1>Windows Update</h1>
+
+    <p>Your $1,000 is being installed.</p>
+
+    <h2 id="updatePercent">0%</h2>
+
+    <p>Please do not turn off your computer.</p>
+
+    <button id="skipUpdate">SKIP UPDATE</button>
+</div>
+
+<!-- FINAL RICKROLL -->
+<div id="final">
+
+    <h1>YOU GOT RICKROLLED!!!</h1>
+
+    <h2>CONGRATULATIONS 💀</h2>
+
+    <p>
+        Your $1,000 has been converted
+        into one legendary song.
+    </p>
+
+    <a class="final-link"
+       href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+       target="_blank"
+       rel="noopener noreferrer">
+
+        <img
+            src="https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg"
+            alt="Never Gonna Give You Up">
+
+        <div class="play">▶</div>
+    </a>
+
+    <h2>NEVER GONNA GIVE YOU UP</h2>
+    <h2>NEVER GONNA LET YOU DOWN</h2>
+
+    <p id="finalCounter"></p>
+
+    <h3>THANKS FOR WASTING YOUR TIME </h3>
+
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+const claim = $("claim");
+const info = $("info");
+const money = $("money");
+
+let attempts = 0;
+let fakeCount = 0;
+let popupCount = 0;
+let finished = false;
+let progress = 0;
+
+const messages = [
+    "NICE TRY! WRONG BUTTON!",
+    "WHY ARE YOU STILL HERE?",
+    "THE BUTTON IS GETTING NERVOUS.",
+    "YOU CANNOT ESCAPE THE $1,000.",
+    "I AM WATCHING YOUR MOUSE.",
+    "OKAY... MAYBE YOU DESERVE IT."
+];
+
+const popupMessages = [
+    ["IMPORTANT MESSAGE", "YOUR MONEY IS GETTING IMPATIENT."],
+    ["SYSTEM WARNING", "TOO MUCH CLICKING DETECTED."],
+    ["CONGRATULATIONS", "YOU HAVE WON ANOTHER $0."],
+    ["ERROR 404", "YOUR COMMON SENSE WAS NOT FOUND."],
+    ["FREE PRIZE", "CLICK THE BUTTON TO WIN NOTHING."],
+    ["ANTIVIRUS ALERT", "DETECTED: EXTREME CURIOSITY."]
+];
+
+function random(min, max) {
+    return Math.random() * (max - min) + min;
+}
+
+// RANDOM TOASTS
+
+function toast(message) {
+    const t = $("toast");
+    t.textContent = message;
+    t.style.display = "block";
+
+    setTimeout(() => {
+        t.style.display = "none";
+    }, 2200);
+}
+
+// FAKE POPUPS
+
+function popup() {
+    if (finished || popupCount >= 7) return;
+
+    popupCount++;
+
+    const p = document.createElement("div");
+    p.className = "popup";
+
+    p.style.left = random(2, 65) + "vw";
+    p.style.top = random(10, 70) + "vh";
+
+    const data = popupMessages[
+        Math.floor(Math.random() * popupMessages.length)
+    ];
+
+    const heading = document.createElement("h3");
+    heading.textContent = data[0];
+
+    const text = document.createElement("p");
+    text.textContent = data[1];
+
+    const close = document.createElement("button");
+    close.textContent = "OK FINE";
+
+    close.onclick = () => {
+        p.remove();
+        popupCount--;
+    };
+
+    p.append(heading, text, close);
+    document.body.appendChild(p);
+
+    setTimeout(() => {
+        if (p.isConnected) {
+            p.remove();
+            popupCount--;
+        }
+    }, 6000);
+}
+
+// MULTIPLY BUTTONS
+
+function multiplyButtons() {
+    if (fakeCount >= 12 || finished) return;
+
+    const area = $("fakeButtons");
+
+    const fake = document.createElement("button");
+    fake.className = "fake";
+    fake.textContent = "CLICK ME!!!";
+
+    fake.style.left = random(2, 75) + "vw";
+    fake.style.top = random(10, 80) + "vh";
+
+    fake.onclick = () => {
+        fake.remove();
+        fakeCount--;
+
+        toast("WRONG BUTTON AGAIN 💀");
+        popup();
+    };
+
+    area.appendChild(fake);
+    fakeCount++;
+}
+
+// MAIN BUTTON
+
+claim.addEventListener("click", () => {
+    if (finished) return;
+
+    const rickrollAudio = $("rickrollAudio");
+    if (rickrollAudio.paused) {
+        rickrollAudio.volume = 0.7;
+        rickrollAudio.currentTime = 0;
+        rickrollAudio.play().catch(() => {
+            console.log("Audio playback was blocked or unavailable.");
+        });
+    }
+
+    attempts++;
+
+    $("stats").textContent =
+        "Buttons clicked: " + attempts;
+
+    const amounts = [
+        "$100",
+        "$250",
+        "$500",
+        "$750",
+        "$999",
+        "$1,000"
+    ];
+
+    money.textContent =
+        amounts[Math.min(attempts - 1, 5)];
+
+    info.textContent =
+        messages[Math.min(attempts - 1, messages.length - 1)];
+
+    popup();
+
+    if (attempts % 2 === 0) {
+        multiplyButtons();
+    }
+
+    if (attempts % 3 === 0) {
+        document.body.classList.add("chaos");
+
+        setTimeout(() => {
+            document.body.classList.remove("chaos");
+        }, 2500);
+    }
+
+    if (attempts >= 6) {
+        startVerification();
+    }
+});
+
+// RANDOM ANNOUNCEMENTS
+
+const randomMessages = [
+    "WHY IS EVERYTHING YELLOW?",
+    "YOUR $1,000 IS LOADING...",
+    "PLEASE STOP TOUCHING THINGS.",
+    "BUTTON DETECTED.",
+    "YOU ARE DOING GREAT. PROBABLY.",
+    "THIS WEBSITE HAS NO CHILL."
+];
+
+const announcementTimer = setInterval(() => {
+    if (finished) {
+        clearInterval(announcementTimer);
+        return;
+    }
+
+    toast(
+        randomMessages[
+            Math.floor(Math.random() * randomMessages.length)
+        ]
+    );
+}, 11000);
+
+// FAKE WINDOWS UPDATE
+
+function startUpdate() {
+    $("update").style.display = "block";
+
+    let value = 0;
+
+    const timer = setInterval(() => {
+        value += random(2, 8);
+
+        if (value >= 99) {
+            value = 99;
+            clearInterval(timer);
+        }
+
+        $("updatePercent").textContent =
+            Math.floor(value) + "%";
+    }, 350);
+
+    $("skipUpdate").onclick = () => {
+        clearInterval(timer);
+        $("update").style.display = "none";
+        continueVerification();
+    };
+
+    setTimeout(() => {
+        if ($("update").style.display === "block") {
+            clearInterval(timer);
+            $("update").style.display = "none";
+            continueVerification();
+        }
+    }, 7000);
+}
+
+// VERIFICATION
+
+let verificationStarted = false;
+
+function startVerification() {
+    if (verificationStarted || finished) return;
+
+    verificationStarted = true;
+
+    claim.style.display = "none";
+    $("fakeButtons").style.display = "none";
+
+    document.querySelector(".subtitle").textContent =
+        "PLEASE WAIT WHILE WE CALCULATE YOUR REWARD.";
+
+    $("loading").style.display = "block";
+
+    setTimeout(startUpdate, 1500);
+}
+
+function continueVerification() {
+    progress = 0;
+
+    const timer = setInterval(() => {
+        progress++;
+        $("percentage").textContent = progress + "%";
+        $("bar").style.width = progress + "%";
+
+        if (progress === 99) {
+            clearInterval(timer);
+
+            setTimeout(() => {
+                $("loadingText").textContent = "VERIFYING YOUR MONEY..";
+                $("percentage").textContent = "100%";
+                $("bar").style.width = "100%";
+
+                setTimeout(showFinal, 1000);
+            }, 120000);
+        }
+    }, 100);
+}
+
+// FINAL
+
+function showFinal() {
+    finished = true;
+
+    $("final").style.display = "block";
+
+    document.body.classList.remove("chaos");
+
+    const count =
+        Number(localStorage.getItem("rickrolls") || 0) + 1;
+
+    localStorage.setItem("rickrolls", count);
+
+    $("finalCounter").textContent =
+        "Rickrolled " + count + " times on this browser.";
+
+    window.scrollTo(0, 0);
+}
+
+</script>
+<audio id="rickrollAudio" loop preload="auto">
+  <source src="https://www.myinstants.com/media/sounds/rick-roll.mp3" type="audio/mpeg">
+</audio>
+</body>
+
+<style>
+  .chaos-window {
+    position: fixed;
+    z-index: 9998;
+    width: 230px;
+    background: #171717;
+    color: white;
+    border: 2px solid #ff3030;
+    border-radius: 9px;
+    box-shadow: 0 8px 30px #0009;
+    font: 14px Arial;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  .chaos-title {
+    background: #ff3030;
+    padding: 9px;
+    font-weight: bold;
+  }
+
+  .chaos-content {
+    padding: 15px;
+  }
+
+  .chaos-window button {
+    background: #ff3030;
+    border: 0;
+    padding: 8px 12px;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  .chaos-toast {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 10000;
+    background: #111;
+    color: white;
+    border: 2px solid #ff3030;
+    padding: 15px;
+    border-radius: 10px;
+    animation: toastIn .3s ease;
+    font-family: Arial;
+  }
+
+  @keyframes toastIn {
+    from { transform: translateX(120%); }
+    to { transform: translateX(0); }
+  }
+
+  .chaos-stop {
+    position: fixed;
+    z-index: 10002;
+    bottom: 15px;
+    left: 15px;
+    background: #00a86b;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 18px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .chaos-shake {
+    animation: chaosShake .15s infinite;
+  }
+
+  @keyframes chaosShake {
+    0% { transform: translate(2px, 1px); }
+    25% { transform: translate(-2px, -1px); }
+    50% { transform: translate(1px, -2px); }
+    75% { transform: translate(-1px, 2px); }
+    100% { transform: translate(0, 0); }
+  }
+</style>
+
+<script>
+(() => {
+  const messages = [
+    "WHERE IS MY $1000?!",
+    "Your mouse has been reported.",
+    "ERROR 404: MONEY NOT FOUND",
+    "Stop clicking. It's getting awkward.",
+    "Calculating your financial future...",
+    "Congratulations! You won absolutely nothing.",
+    "The button is judging you.",
+    "PLEASE STOP PRESSING ME",
+    "Your computer is emotionally confused.",
+    "Installing more disappointment..."
+  ];
+
+  const titles = [
+    "SYSTEM WARNING",
+    "MONEY DETECTOR",
+    "VERY IMPORTANT",
+    "WINDOWS 1000",
+    "TOTALLY REAL ERROR",
+    "URGENT MESSAGE"
+  ];
+
+  let active = true;
+  let windowCount = 0;
+  let toastCount = 0;
+  const timers = [];
+  const intervals = [];
+
+  const stop = document.createElement("button");
+  stop.className = "chaos-stop";
+  stop.textContent = "STOP THE CHAOS";
+  document.body.appendChild(stop);
+
+  function random(array) {
+    return array[Math.floor(Math.random() * array.length)];
+  }
+
+  function later(fn, delay) {
+    const id = setTimeout(() => {
+      if (active) fn();
+    }, delay);
+    timers.push(id);
+  }
+
+  function every(fn, delay) {
+    const id = setInterval(() => {
+      if (active) fn();
+    }, delay);
+    intervals.push(id);
+  }
+
+  function makeWindow() {
+    if (!active || windowCount >= 7) return;
+
+    windowCount++;
+
+    const win = document.createElement("div");
+    win.className = "chaos-window";
+
+    win.innerHTML = `
+      <div class="chaos-title">${random(titles)}</div>
+      <div class="chaos-content">
+        <p>${random(messages)}</p>
+        <button>OKAY I GUESS</button>
+      </div>
+    `;
+
+    document.body.appendChild(win);
+
+    let x = Math.random() * Math.max(0, innerWidth - 250);
+    let y = Math.random() * Math.max(0, innerHeight - 180);
+    let vx = (Math.random() - .5) * 9;
+    let vy = (Math.random() - .5) * 9;
+
+    const move = () => {
+      if (!active || !win.isConnected) return;
+
+      x += vx;
+      y += vy;
+
+      const maxX = innerWidth - win.offsetWidth;
+      const maxY = innerHeight - win.offsetHeight;
+
+      if (x < 0 || x > maxX) vx *= -1;
+      if (y < 0 || y > maxY) vy *= -1;
+
+      x = Math.max(0, Math.min(maxX, x));
+      y = Math.max(0, Math.min(maxY, y));
+
+      win.style.left = x + "px";
+      win.style.top = y + "px";
+      requestAnimationFrame(move);
+    };
+
+    requestAnimationFrame(move);
+
+    win.querySelector("button").onclick = () => {
+      win.remove();
+      windowCount--;
+      toast("You closed one. Three more are coming.");
+    };
+  }
+
+  function toast(message = random(messages)) {
+    if (!active || toastCount >= 4) return;
+
+    toastCount++;
+
+    const el = document.createElement("div");
+    el.className = "chaos-toast";
+    el.textContent = message;
+    document.body.appendChild(el);
+
+    later(() => {
+      el.remove();
+      toastCount--;
+    }, 3500);
+  }
+
+  function shake() {
+    document.body.classList.add("chaos-shake");
+    later(() => document.body.classList.remove("chaos-shake"), 700);
+  }
+
+  function chaosColors() {
+    document.body.style.background =
+      `hsl(${Math.random() * 360}, 90%, 85%)`;
+  }
+
+  function fakeUpdate() {
+    const overlay = document.createElement("div");
+
+    Object.assign(overlay.style, {
+      position: "fixed",
+      inset: "0",
+      zIndex: "10001",
+      background: "#0755aa",
+      color: "white",
+      display: "grid",
+      placeContent: "center",
+      textAlign: "center",
+      fontFamily: "Arial"
+    });
+
+    overlay.innerHTML = `
+      <h1>Working on updates...</h1>
+      <h2 id="fake-percent">0%</h2>
+      <p>Please do not turn off your imagination.</p>
+    `;
+
+    document.body.appendChild(overlay);
+
+    let percent = 0;
+
+    const update = setInterval(() => {
+      if (!active) {
+        clearInterval(update);
+        overlay.remove();
+        return;
+      }
+
+      percent += Math.ceil(Math.random() * 8);
+      percent = Math.min(percent, 100);
+
+      overlay.querySelector("#fake-percent").textContent =
+        percent + "%";
+
+      if (percent >= 100) {
+        clearInterval(update);
+        overlay.remove();
+        toast("Update complete. Nothing changed.");
+      }
+    }, 300);
+
+    intervals.push(update);
+  }
+
+  // Start the chaos after the visitor interacts.
+  document.addEventListener("click", () => {
+    if (!active) return;
+
+    if (Math.random() < .45) makeWindow();
+    if (Math.random() < .4) toast();
+    if (Math.random() < .2) shake();
+  });
+
+  every(() => {
+    if (windowCount < 4) makeWindow();
+  }, 4500);
+
+  every(() => toast(), 6500);
+  every(() => chaosColors(), 5000);
+
+  every(() => {
+    const headings = document.querySelectorAll("h1, h2");
+    headings.forEach(el => {
+      if (Math.random() < .5) {
+        el.dataset.original ||= el.textContent;
+        el.textContent = random(messages);
+      } else if (el.dataset.original) {
+        el.textContent = el.dataset.original;
+      }
+    });
+  }, 3000);
+
+  later(fakeUpdate, 18000);
+
+  stop.onclick = () => {
+    active = false;
+    timers.forEach(clearTimeout);
+    intervals.forEach(clearInterval);
+
+    document.querySelectorAll(
+      ".chaos-window, .chaos-toast"
+    ).forEach(el => el.remove());
+
+    document.body.classList.remove("chaos-shake");
+    document.body.style.background = "";
+    stop.remove();
+
+    alert("Congratulations. You survived the $1,000 nightmare.");
+  };
+})();
+</script>
+
+</html>
